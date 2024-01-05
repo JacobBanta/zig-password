@@ -1,5 +1,5 @@
 .{
-    .name = "zig-password",
+    .name = "password",
     .version = "0.0.1",
     .paths = .{
         "",

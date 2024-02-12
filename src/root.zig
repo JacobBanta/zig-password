@@ -110,12 +110,12 @@ pub fn getPassword(comptime options: struct {
         var i: usize = 0;
         while (true) {
             const input = std.io.getStdIn().reader().readByte() catch continue;
-            if (input == 10 and i < options.maxLen and i >= options.minLen) break;
-            if (input == 10 and i < options.minLen) {
+            if ((input == 10 or input == 13) and i < options.maxLen and i >= options.minLen) break;
+            if ((input == 10 or input == 13) and i < options.minLen) {
                 return error.tooShort;
             }
-            if (input == 10) return error.tooLong;
-            if (input == 127 and i >= 0) {
+            if (input == 10 or input == 13) return error.tooLong;
+            if ((input == 127 or input == 8) and i >= 0) {
                 if (i < options.maxLen)
                     buffer[i] = 0;
                 if (i > 0)
@@ -123,7 +123,7 @@ pub fn getPassword(comptime options: struct {
                 std.debug.print("{c} {c}", .{ 8, 8 });
                 continue;
             }
-            if (input == 127) continue;
+            if (input == 127 or input == 8) continue;
             if (i >= options.maxLen) {
                 std.debug.print("*", .{});
                 continue;
